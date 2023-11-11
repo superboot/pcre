@@ -1,0 +1,24 @@
+#!/bin/bash
+## Enables the filtering of text from standard in or files listed as trailing arguments through Perl's regex engine.
+
+# Make pattern
+argParse()
+{
+    pattern="$1"
+    shift
+
+    declare -g -a files
+    files=("$@")
+    numberOfFiles="${#files[*]}"
+    if [[ "$numberOfFiles" = 0 ]]; then
+        files=("/dev/stdin")
+    fi
+}
+
+main()
+{
+    argParse "$@"
+    perl -lnpe "$pattern" "${files[@]}"
+}
+
+main "$@"
